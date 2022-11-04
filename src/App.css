@@ -1,0 +1,47 @@
+h4 {
+    padding: 10px;
+  }
+  
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    background-color: aliceblue;
+    height: 50px;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+    font-size: medium;
+  }
+  
+  img {
+    padding-left: 20px;
+  }
+  
+  .game--container {
+    display: flex;
+    justify-content: center;
+    min-width: 750px;
+  }
+  
+  .game {
+    display: flex;
+    flex-wrap: wrap;
+    border-style: solid;
+    border-color: grey;
+    height: 350px;
+    width: 350px;
+    border-radius: 8px;
+    margin: 35px;
+  }
+  
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+    font-size: 60px;
+  }
