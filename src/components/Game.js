@@ -1,18 +1,13 @@
 import Box from "./Box"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import GameOver from "./GameOver"
+import Confetti from "react-confetti"
 
 export default function Game() {
-  const [box, setBox] = useState([
-    { status: "", position: 0 },
-    { status: "", position: 1 },
-    { status: "", position: 2 },
-    { status: "", position: 3 },
-    { status: "", position: 4 },
-    { status: "", position: 5 },
-    { status: "", position: 6 },
-    { status: "", position: 7 },
-    { status: "", position: 8 },
-  ])
+  const [box, setBox] = useState(["", "", "", "", "", "", "", "", ""])
+  const [player, setPlayer] = useState(true)
+  const [gameOver, setGameOver] = useState(false)
+  const [result, setResult] = useState("")
 
   const winCombos = [
     [0, 1, 2],
@@ -25,33 +20,62 @@ export default function Game() {
     [2, 4, 6],
   ]
 
+  function checkWinner() {
+    const winner = winCombos.some(combo => {
+      return (
+        box[combo[0]] === box[combo[1]] &&
+        box[combo[1]] === box[combo[2]] &&
+        (box[combo[0]] === "X" || box[combo[0]] === "O")
+      )
+    })
+    if (winner) {
+      setGameOver(true)
+      setResult(player ? "X" : "O")
+    }
+  }
 
-  const [player, setPlayer] = useState(true)
-
-  function handleClick(clickedBox) {
-    if (clickedBox.status === "") {
-      player === true ? (clickedBox.status = "X") : (clickedBox.status = "O")
+  function handleClick(e, i) {
+    if (e === "" && !gameOver) {
+      player ? setBox((box[i] = "X")) : setBox((box[i] = "O"))
       setBox([...box])
+      checkWinner()
       setPlayer(prevPlayer => !prevPlayer)
     }
   }
 
-  let boxComponents = box.map(e => {
+  let boxComponents = box.map((e, i) => {
     return (
       <Box
         boxClick={() => {
-          handleClick(e)
+          handleClick(e, i)
         }}
-        position={e.position}
-        status={e.status}
-        key={e.position}
+        status={e}
+        key={i}
       />
     )
   })
 
+  function resetGame() {
+    console.log("new game")
+    setBox(["", "", "", "", "", "", "", "", ""])
+    setPlayer(true)
+    setGameOver(false)
+  }
+
   return (
-    <div className="game--container">
-      <div className="game">{boxComponents}</div>
-    </div>
+    <>
+      <div className="game--container">
+        <div className="game">
+          {!gameOver ? (
+            boxComponents
+          ) : (
+            <>
+              <GameOver result={result} newGame={resetGame} />
+              <Confetti />
+            </>
+          )}
+        </div>
+      </div>
+    </>
   )
 }
